@@ -1,0 +1,82 @@
+---
+- name: Install necessities
+  hosts: jenkins
+  become: yes
+  tasks:
+  - name: Install packages
+    yum:
+      name:
+        - python3
+        - docker
+        - java
+        - git
+      update_cache: yes
+      state: present
+
+  - name: Install docker-compose
+    get_url:
+      url: https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: +x
+
+  - name: Install docker python dependency
+    pip:
+      name: 
+        - docker
+        - docker-compose
+
+  - name: Download jenkins repo
+    get_url:
+      url: http://pkg.jenkins.io/redhat-stable/jenkins.repo
+      dest: /etc/yum.repos.d/jenkins.repo
+
+  - name: Import Jenkins Key
+    rpm_key:
+      state: present
+      key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+  - name: Install Jenkins
+    yum:
+      name: jenkins
+      state: present
+  
+- name: Start docker and jenkins
+  hosts: jenkins
+  become: yes
+  tasks:
+  - name: Start docker daemon
+    systemd:
+      name: docker
+      state: started
+      enabled: true
+  - name: Start jenkins
+    systemd:
+      name: jenkins
+      state: started
+      enabled: true
+
+- name: Add users to docker group
+  hosts: jenkins
+  become: yes
+  tasks:
+  - name: Add ec2-user to docker group
+    user:
+      name: ec2-user
+      groups: docker
+      append: yes
+  - name: Add jenkins user to docker group
+    user: 
+      name: jenkins
+      groups: docker
+      append: yes
+  - name: Reconnect to server session
+    meta: reset_connection
+
+  - name: Get init password Jenkins
+    shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+    changed_when: false
+    register: result
+
+  - name: Print init password Jenkins
+    debug:
+      var: result.stdout
