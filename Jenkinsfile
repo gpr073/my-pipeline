@@ -21,7 +21,7 @@ pipeline {
         stage('Building image') {
             steps{
                 script {
-                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${VERSION}"
+                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_REPO_NAME}-${VERSION}"
                 }
             }
         }
@@ -29,8 +29,8 @@ pipeline {
         stage('Pushing to ECR') {
             steps{  
                 script {
-                    sh "docker tag ${IMAGE_REPO_NAME}:${VERSION} ${REPOSITORY_URI}:${VERSION}"
-                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
+                    sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_REPO_NAME}-${VERSION} ${REPOSITORY_URI}:${IMAGE_REPO_NAME}-${VERSION}"
+                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_REPO_NAME}-${VERSION}"
                 }
             }
         }
