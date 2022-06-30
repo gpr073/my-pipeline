@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        VERSION = "${env.BUILD_ID}"
+        VERSION = "v${env.BUILD_ID}"
         AWS_ACCOUNT_ID = "396682960377"
         AWS_DEFAULT_REGION = "us-east-1" 
         IMAGE_REPO_NAME = "jenkins-demo"
