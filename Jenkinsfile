@@ -16,10 +16,20 @@ pipeline {
                 }
             }
         }
-        stage('Hello') {
+        
+        stage('Building image') {
             steps {
                 script {
-                    sh "echo Success"
+                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${VERSION}"
+                }
+            }
+        }
+   
+        stage('Pushing to ECR') {
+            steps {  
+                script {
+                    sh "docker tag ${IMAGE_REPO_NAME}:${VERSION} ${REPOSITORY_URI}:${VERSION}"
+                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
                 }
             }
         }
