@@ -16,7 +16,13 @@ pipeline {
                 }
             }
         }
-        
+        stage('Hello') {
+            steps {
+                script {
+                    sh "echo Success"
+                }
+            }
+        }
         stage('Building image') {
             steps {
                 script {
