@@ -23,7 +23,7 @@ pipeline {
         stage('Building image') {
             steps {
                 script {
-                    dockerImage = docker.build "${IMAGE_REPO_NAME}:${VERSION}"
+                    sh "docker build ${IMAGE_REPO_NAME}:${VERSION}"
                 }
             }
         }
