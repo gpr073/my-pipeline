@@ -46,6 +46,7 @@ pipeline {
                 script {
                     dir('terraform') {
                         sh "terraform init"
+                        sh "terraform import aws_iam_role.my_role_identifier ECRFullAccess"
                         sh "terraform apply --auto-approve"
                         EC2_IP = sh(
                             script: "terraform output ec2-public-ip",
@@ -61,7 +62,7 @@ pipeline {
             }
             steps {
                 script {
-                    sleep(time: 30, unit: "SECONDS")
+                    sleep(time: 120, unit: "SECONDS")
                     def shellCmd = "bash ./server-cmds.sh ${IMAGE}"
                     def ec2Instance = "ec2-user@${EC2_IP}"
                     def login = "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
