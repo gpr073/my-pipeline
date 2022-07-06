@@ -62,7 +62,6 @@ resource "aws_instance" "myapp-server" {
   ami = data.aws_ami.amazon-linux.id
   instance_type = "t2.micro"
 
-  subnet_id = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.myapp-sg.id]
   availability_zone = "us-east-1a"
 
