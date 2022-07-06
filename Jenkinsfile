@@ -76,4 +76,3 @@ pipeline {
         }
     }
 }
-396682960377.dkr.ecr.us-east-1.amazonaws.com/jenkins-demo:version-1.0.3
