@@ -8,7 +8,6 @@ variable all {
 
 resource "aws_security_group" "myapp-sg" {
   name = "myapp-sg"
-  vpc_id = aws_vpc.myapp-vpc.id
 
   ingress {
     from_port = 22
