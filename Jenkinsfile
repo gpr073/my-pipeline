@@ -56,18 +56,24 @@ pipeline {
             }
         }
         stage('SSH into EC2 server') {
+            environment {
+                IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
+            }
             steps {
                 script {
                     sleep(time: 90, unit: "SECONDS")
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE}"
                     def ec2Instance = "ec2-user@${EC2_IP}"
                     sshagent(['ec2-server']) {
+                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
                         sh "ssh -o StrictHostKeyChecking=no ${ec2Instance}"
                         sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                        sh "IMAGE = '${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}' docker-compose up"
+                        sh "${shellCmd}"
                     }
                 }
             }
         }
     }
 }
+396682960377.dkr.ecr.us-east-1.amazonaws.com/jenkins-demo:version-1.0.3
