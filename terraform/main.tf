@@ -31,10 +31,10 @@ resource "aws_security_group" "myapp-sg" {
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = [var.all]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = [var.all]
   }
 
   tags = {
@@ -58,6 +58,27 @@ data "aws_ami" "amazon-linux" {
   owners = ["amazon"]
 }
 
+resource "aws_iam_role" "ECRFullAccess" {
+    name = "ECRFullAccess"
+    assume_role_policy = jsonencode({
+        Version: "2012-10-17",
+        Statement: [
+            {
+                Action = "sts:AssumeRole"
+                Effect = "Allow"
+                Principal = {
+                    Service: "ec2.amazonaws.com"
+                }
+            },
+        ]
+    })
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+    name = "jenkins_ec2_profile"
+    role = "${aws_iam_role.ECRFullAccess.name}"
+}
+
 resource "aws_instance" "myapp-server" {
   ami = data.aws_ami.amazon-linux.id
   instance_type = "t2.micro"
@@ -67,6 +88,7 @@ resource "aws_instance" "myapp-server" {
 
   associate_public_ip_address = true
   key_name = "newkey"
+  iam_instance_profile = "${aws_iam_instance_profile.ec2_profile.name}"
 
   user_data = file("entry-script.sh")
 
