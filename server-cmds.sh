@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 export IMAGE=$1
-docker-compose up
+sudo service docker start
+docker-compose up -d
 echo"success"

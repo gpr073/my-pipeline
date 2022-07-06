@@ -61,7 +61,7 @@ pipeline {
             }
             steps {
                 script {
-                    sleep(time: 90, unit: "SECONDS")
+                    sleep(time: 30, unit: "SECONDS")
                     def shellCmd = "bash ./server-cmds.sh ${IMAGE}"
                     def ec2Instance = "ec2-user@${EC2_IP}"
                     sshagent(['ec2-server']) {
