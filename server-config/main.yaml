@@ -13,17 +13,10 @@
       update_cache: yes
       state: present
 
-  - name: Install docker-compose
-    get_url:
-      url: https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64
-      dest: /usr/local/bin/docker-compose
-      mode: +x
-
   - name: Install docker python dependency
     pip:
       name: 
         - docker
-        - docker-compose
 
   - name: Download jenkins repo
     get_url:
