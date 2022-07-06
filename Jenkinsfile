@@ -44,16 +44,8 @@ pipeline {
             }
             steps {
                 script {
-                    try {
-                        dir('terraform') {
-                            sh "terraform init"
-                            sh "terraform import aws_iam_role.ECRFullAccess ECRFullAccess"
-                        }
-                    } catch(err) {
-                        echo err.getMessage()
-                    }
                     dir('terraform') {
-
+                        sh "terraform init"
                         sh "terraform apply --auto-approve"
                         EC2_IP = sh(
                             script: "terraform output ec2-public-ip",
