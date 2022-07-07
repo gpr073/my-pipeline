@@ -33,16 +33,6 @@
       name: jenkins
       state: present
 
-  - name: Download terraform repo
-    get_url:
-      url: https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-      dest: /etc/yum.repos.d/hashicorp.repo
-
-  - name: Install terraform
-    yum:
-      name: terraform
-      state: present
-
 - name: Start docker and jenkins
   hosts: jenkins
   become: yes

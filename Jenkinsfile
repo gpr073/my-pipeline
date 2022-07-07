@@ -46,14 +46,13 @@ pipeline {
             }
             steps {
                 script {
-                    sleep(time: 120, unit: "SECONDS")
-                    def shellCmd = "bash ./server-cmds.sh ${IMAGE}"
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE} ${AWS_DEFAULT_REGION} ${AWS_ACCOUNT_ID}"
                     def ec2Instance = "ec2-user@${EC2_IP}"
-                    def login = "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                    //def login = "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                     sshagent(['ec2-server']) {
                         sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
-                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${login} ${shellCmd}"
+                        sh "ssh -o StrictHostKeyChecking=no ${ec2Instance} ${shellCmd}"
                     }
                 }
             }
