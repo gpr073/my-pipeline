@@ -37,28 +37,11 @@ pipeline {
             }
         }
 
-        stage('Provisioning Server') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_key')
-            }
-            steps {
-                script {
-                    dir('terraform') {
-                        sh "terraform init"
-                        sh "terraform apply --auto-approve"
-                        EC2_IP = sh(
-                            script: "terraform output ec2-public-ip",
-                            returnStdout: true
-                        ).trim()
-                    }
-                }
-            }
-        }
         stage('SSH into EC2 server') {
             environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_key')
+                //AWS_ACCESS_KEY_ID = credentials('jenkins_aws_id')
+                //AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_key')
+                EC2_IP = "3.84.164.117"
                 IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
             }
             steps {
