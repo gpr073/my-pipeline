@@ -39,7 +39,7 @@ pipeline {
 
         stage('SSH into EC2 server') {
             environment {
-                EC2_IP = "3.84.164.117"
+                EC2_IP = "54.167.203.229"
                 IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
             }
             steps {
