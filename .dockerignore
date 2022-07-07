@@ -1,1 +1,8 @@
 node_modules/
+server_config/
+.gitignore
+docker-compose.yaml
+Dockerfile
+entry-script.sh
+Jenkinsfile
+server-cmds.sh
