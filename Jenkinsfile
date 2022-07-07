@@ -39,8 +39,6 @@ pipeline {
 
         stage('SSH into EC2 server') {
             environment {
-                //AWS_ACCESS_KEY_ID = credentials('jenkins_aws_id')
-                //AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_key')
                 EC2_IP = "3.84.164.117"
                 IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
             }
@@ -48,7 +46,6 @@ pipeline {
                 script {
                     def shellCmd = "bash ./server-cmds.sh ${IMAGE} ${AWS_DEFAULT_REGION} ${AWS_ACCOUNT_ID}"
                     def ec2Instance = "ec2-user@${EC2_IP}"
-                    //def login = "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                     sshagent(['ec2-server']) {
                         sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${ec2Instance}:/home/ec2-user"
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${ec2Instance}:/home/ec2-user"
