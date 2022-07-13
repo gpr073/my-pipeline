@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         VERSION = "version-${params.Version}"
-        AWS_ACCOUNT_ID = "396682960377"
+        AWS_ACCOUNT_ID = "Add Account ID here"
         AWS_DEFAULT_REGION = "us-east-1" 
         IMAGE_REPO_NAME = "jenkins-demo"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
@@ -39,7 +39,7 @@ pipeline {
 
         stage('SSH into EC2 server') {
             environment {
-                EC2_IP = "54.167.203.229"
+                EC2_IP = "Add EC2 IP here"
                 IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${VERSION}"
             }
             steps {
