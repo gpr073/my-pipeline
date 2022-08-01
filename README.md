@@ -23,6 +23,7 @@ An Ansible playbook is used to configure a Jenkins master server on AWS where th
 ### Executing program
 
 * Create an EC2 instance with a key pair.
+* Create an EC2 role to give access to ECR and attach it to the EC2 server.
 * Provide the key to Ansible playbook.
 * Install Ansible and run the Ansible playbook.
 * Login to the Jenkins master server and configure it.
