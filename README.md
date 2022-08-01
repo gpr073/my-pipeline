@@ -8,18 +8,30 @@ Used Jenkins to create a pipeline job which does the following:
 - An image is built using Dockerfile in the repo.
 - The image is versioned and pushed to the AWS ECR repo.
 - In the last stage Jenkins uses SSH to connect to another EC2 server where the docker-compose.yaml and server-cmds.sh files are copied.
-- The server-cmds.sh
+- The script server-cmds.sh is executed where it logs into the private ECR repo and executes the docker-compose.yaml file.
+- Docker compose pulls the recently uploaded image and starts the container.
+
+An Ansible playbook is used to configure a Jenkins master server on AWS where the above pipeline job is run.
 
 ## Getting Started
 
 ### Dependencies
 
-* Docker
+* Ansible
+* AWS account with needed permissions.
 
 ### Executing program
 
-* Install Docker.
+* Create an EC2 instance with a key pair.
+* Provide the key to Ansible playbook.
+* Install Ansible and run the Ansible playbook.
+* Login to the Jenkins master server and configure it.
+* Provide the GitHub repo while creating the pipeline job.
+* Create another EC2 instance with same key pair.
+* Run the Jenkins pipeline job.
 * The web application starts on port 3000.
+
+On host server
 ```
-docker compose up -d
+ansible-playbook main.yaml
 ```
