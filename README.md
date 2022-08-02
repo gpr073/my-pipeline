@@ -32,7 +32,7 @@ An Ansible playbook is used to configure a Jenkins master server on AWS where th
 * Run the Jenkins pipeline job.
 * The web application starts on port 3000.
 
-On host server
+On client server
 ```
 ansible-playbook main.yaml
 ```
